@@ -10,8 +10,7 @@
             padding: 0;
             overflow: hidden;
             background-color: #f0f8ff;
-            /* Using the uploaded cloudsky.jpg as background */
-            background-image: url('cloudsky.png');
+            background-image: url('cloudsky.jpg');
             background-size: cover;
             background-position: center;
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -75,17 +74,19 @@
             align-items: center;
             z-index: 200;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px; /* Increased vertical padding for mobile */
             box-sizing: border-box;
+            overflow-y: auto; /* Allows scrolling on short screens */
         }
 
         .main-logo {
             width: 300px;
             max-width: 80%;
             margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
-        h1 { font-size: 2.5rem; margin: 0 0 20px 0; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { font-size: 2.5rem; margin: 0 0 20px 0; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; flex-shrink: 0; }
         
         .instructions {
             background: rgba(255, 255, 255, 0.9);
@@ -96,6 +97,7 @@
             line-height: 1.5;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             color: #444;
+            flex-shrink: 0;
         }
 
         .bullet-grid {
@@ -107,7 +109,14 @@
             font-weight: bold;
         }
 
-        .btn-group { display: flex; gap: 15px; margin-bottom: 40px; }
+        .btn-group { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            flex-shrink: 0;
+            flex-wrap: wrap; /* Allows buttons to wrap on very narrow screens */
+            justify-content: center;
+        }
         
         button.main-btn {
             padding: 12px 30px;
@@ -127,11 +136,12 @@
         .btn-hard { background: #9b59b6; color: white; }
 
         .copyright {
-            position: absolute;
-            bottom: 20px;
             font-size: 0.8rem;
             color: #7f8c8d;
             font-weight: bold;
+            margin-top: 30px; /* Space between buttons and text */
+            padding-bottom: 20px;
+            flex-shrink: 0;
         }
 
         /* --- THE PLAYER (WISHY) --- */
@@ -166,6 +176,14 @@
 
         .gem-biscuit { position: absolute; width: 60px; height: 60px; }
         .gem-biscuit img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .instructions { font-size: 0.9rem; }
+            .btn-group { gap: 10px; }
+            button.main-btn { padding: 10px 20px; font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
@@ -177,7 +195,7 @@
         </div>
 
         <div id="menu-screen" class="overlay">
-            <img src="wishylogo.png" alt="Wishy Production" class="main-logo">
+            <img src="wishy logo - horizontal fit.png" alt="Wishy Production" class="main-logo">
             <h1>Wishy's Escape</h1>
             
             <div class="instructions">
@@ -237,7 +255,6 @@
             hard: { bullets: [{color: '#2ecc71', penalty: 1}, {color: '#f1c40f', penalty: 2}, {color: '#e74c3c', penalty: 3}, {color: '#9b59b6', penalty: 4}], monsterChance: 0.12, biscuitChance: 0.4 }
         };
 
-        // --- CONTROLS ---
         document.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
             starX = e.clientX - 42;
@@ -261,7 +278,6 @@
             star.style.left = starX + 'px';
         }
 
-        // --- GAMEPLAY ---
         function startGame(difficulty) {
             score = 0;
             gameActive = true;
@@ -275,7 +291,6 @@
             container.style.cursor = 'none';
 
             gameLoop();
-            // High frequency spawning (every 600ms)
             spawnInterval = setInterval(() => spawnItem(difficulty), 600);
         }
 
@@ -286,7 +301,6 @@
             const item = document.createElement('div');
             let type = 'biscuit'; 
 
-            // Spawn Distribution
             if (roll < config[difficulty].monsterChance) {
                 type = 'monster';
             } else if (roll < (config[difficulty].monsterChance + config[difficulty].biscuitChance)) {
@@ -338,7 +352,6 @@
         function checkCollision(a, b) {
             const r1 = a.getBoundingClientRect();
             const r2 = b.getBoundingClientRect();
-            // Tighten hitboxes for precise dodging
             const padding = 15;
             return !(r1.top + padding > r2.bottom - padding || 
                      r1.right - padding < r2.left + padding || 
@@ -356,7 +369,7 @@
         function handleEat() {
             score++;
             scoreBoard.innerText = `Score: ${score}`;
-            starImg.src = 'wishy-open.png'; // Mouth open image
+            starImg.src = 'wishy-open.png';
             setTimeout(() => { if(gameActive) starImg.src = 'wishy-default.png'; }, 250);
         }
 
