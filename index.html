@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishy's Escape</title>
+    <title>Star Escape: Wishy's Adventure</title>
     <style>
+        :root {
+            --primary-yellow: #f1c40f;
+            --danger-red: #e74c3c;
+            --wishy-blue: #2c3e50;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -13,7 +19,7 @@
             background-image: url('cloudsky.png');
             background-size: cover;
             background-position: center;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: #333;
             cursor: default;
         }
@@ -24,7 +30,7 @@
             position: relative;
         }
 
-        /* --- PERSISTENT UI --- */
+        /* --- UI LAYER --- */
         #ui-layer {
             position: absolute;
             top: 20px;
@@ -38,17 +44,17 @@
         }
 
         #score-board {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2c3e50;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--wishy-blue);
+            text-shadow: 2px 2px 0px white;
             display: none;
         }
 
         .btn-mini-menu {
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #f1c40f;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary-yellow);
             color: #333;
             border-radius: 20px;
             cursor: pointer;
@@ -57,7 +63,6 @@
             display: none;
             transition: 0.2s;
         }
-        .btn-mini-menu:hover { background: #f1c40f; color: white; }
 
         /* --- SCREENS --- */
         .overlay {
@@ -66,8 +71,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -79,116 +84,112 @@
             overflow-y: auto;
         }
 
-        .main-logo {
-            width: 300px;
-            max-width: 80%;
-            margin-bottom: 10px;
-            flex-shrink: 0;
-        }
+        .main-logo { width: 280px; max-width: 70%; margin-bottom: 10px; }
+        h1 { font-size: 2.2rem; margin: 0 0 15px 0; color: var(--wishy-blue); text-transform: uppercase; letter-spacing: 2px; }
 
-        h1 { font-size: 2.5rem; margin: 0 0 20px 0; color: #2c3e50; text-transform: uppercase; letter-spacing: 2px; flex-shrink: 0; }
-        
         .instructions {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             padding: 20px;
-            border-radius: 20px;
-            max-width: 550px;
+            border-radius: 25px;
+            max-width: 500px;
             margin-bottom: 25px;
-            line-height: 1.5;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            color: #444;
-            flex-shrink: 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .bullet-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 0.85rem;
-            margin: 10px 0;
-            font-weight: bold;
+            gap: 10px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            text-align: left;
         }
 
-        .btn-group { 
-            display: flex; 
-            gap: 15px; 
-            margin-bottom: 20px; 
-            flex-shrink: 0;
-            flex-wrap: wrap; 
-            justify-content: center;
+        /* --- GAME OVER CARD --- */
+        .score-card {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            width: 320px;
+            max-width: 90%;
+            border: 4px solid var(--primary-yellow);
         }
+
+        .monster-display {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            object-fit: contain;
+        }
+
+        .final-score-val {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--wishy-blue);
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 25px; justify-content: center; flex-wrap: wrap; }
         
         button.main-btn {
-            padding: 12px 30px;
-            font-size: 1rem;
+            padding: 14px 25px;
+            font-size: 0.9rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: 0.3s;
-            font-weight: bold;
+            font-weight: 800;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        button.main-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
         .btn-easy { background: #2ecc71; color: white; }
-        .btn-medium { background: #f1c40f; color: white; }
+        .btn-medium { background: var(--primary-yellow); color: white; }
         .btn-hard { background: #9b59b6; color: white; }
-
-        /* Instagram Button Style */
-        .btn-instagram {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        
+        .btn-insta {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
             color: white;
+            width: 100%;
         }
 
         .copyright {
-            font-size: 0.8rem;
-            color: #7f8c8d;
+            font-size: 0.75rem;
+            color: #95a5a6;
             font-weight: bold;
-            margin-top: 30px; 
+            margin-top: 40px;
             padding-bottom: 20px;
-            flex-shrink: 0;
         }
 
-        /* --- THE PLAYER (WISHY) --- */
-        #star {
-            position: absolute;
-            bottom: 40px;
-            width: 85px;
-            height: 85px;
-            display: none;
-            z-index: 50;
-        }
+        /* --- GAME OBJECTS --- */
+        #star { position: absolute; bottom: 50px; width: 80px; height: 80px; display: none; z-index: 50; }
         #star img { width: 100%; height: 100%; object-fit: contain; }
+
+        .flower-bullet {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .monster { position: absolute; width: 90px; height: 90px; }
+        .monster img { width: 100%; height: 100%; object-fit: contain; }
+
+        .gem-biscuit { position: absolute; width: 55px; height: 55px; }
+        .gem-biscuit img { width: 100%; height: 100%; object-fit: contain; }
 
         @keyframes shake {
             0%, 100% { transform: translate(0,0); }
             25% { transform: translate(-10px, 0); }
             75% { transform: translate(10px, 0); }
         }
-        .hit-shake { animation: shake 0.15s ease-in-out 2; }
-
-        /* --- FALLING ITEMS --- */
-        .flower-bullet {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-        }
-
-        .monster { position: absolute; width: 100px; height: 100px; }
-        .monster img { width: 100%; height: 100%; object-fit: contain; }
-
-        .gem-biscuit { position: absolute; width: 60px; height: 60px; }
-        .gem-biscuit img { width: 100%; height: 100%; object-fit: contain; }
+        .hit-shake { animation: shake 0.1s ease-in-out 3; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .instructions { font-size: 0.9rem; }
-            .btn-group { gap: 10px; }
-            button.main-btn { padding: 10px 20px; font-size: 0.85rem; }
-            .main-logo { width: 220px; }
+            .score-card { padding: 20px; }
+            .final-score-val { font-size: 3rem; }
+            .main-logo { width: 200px; }
         }
     </style>
 </head>
@@ -196,26 +197,24 @@
 
     <div id="game-container">
         <div id="ui-layer">
-            <div id="score-board">Score: 0</div>
+            <div id="score-board">SCORE: 0</div>
             <button class="btn-mini-menu" id="mini-menu-btn" onclick="resetToMenu()">MENU</button>
         </div>
 
         <div id="menu-screen" class="overlay">
-            <img src="wishylogo.png" alt="Wishy Production" class="main-logo">
-            <h1>Wishy's Escape</h1>
+            <img src="wishylogo.png" alt="Wishy Logo" class="main-logo">
+            <h1>Wishy's Star Escape</h1>
             
             <div class="instructions">
-                <strong>HOW TO PLAY:</strong><br>
-                Move Wishy using your <strong>Mouse</strong> or <strong>Left/Right Arrows</strong>.<br>
-                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge the <strong>Monster</strong>!
-                
+                <strong>TAP BUTTONS TO START</strong><br>
+                Move with <strong>Mouse</strong> or <strong>Arrows</strong>.
                 <div class="bullet-grid">
-                    <span style="color: #95a5a6">⚪ Grey Flower: -1</span>
-                    <span style="color: #27ae60">🟢 Green Flower: -1</span>
-                    <span style="color: #f39c12">🟡 Yellow Flower: -2</span>
-                    <span style="color: #e74c3c">🔴 Red Flower: -3</span>
-                    <span style="color: #8e44ad">🟣 Purple Flower: -4</span>
-                    <span style="color: #000">👾 MONSTER: DEAD</span>
+                    <span style="color: #7f8c8d">🔘 Grey: -1</span>
+                    <span style="color: #27ae60">🟢 Green: -1</span>
+                    <span style="color: #f39c12">🟡 Yellow: -2</span>
+                    <span style="color: #e74c3c">🔴 Red: -3</span>
+                    <span style="color: #8e44ad">🟣 Purple: -4</span>
+                    <span style="color: #000">👾 MONSTER: END</span>
                 </div>
             </div>
 
@@ -229,14 +228,19 @@
         </div>
 
         <div id="game-over-screen" class="overlay" style="display: none;">
-            <h1 id="over-status">GAME OVER</h1>
-            <p id="final-score" style="font-size: 1.5rem; color: #2c3e50; margin-bottom: 25px;">Score: 0</p>
-            
-            <div class="btn-group">
-                <button class="main-btn btn-medium" onclick="resetToMenu()">Main Menu</button>
-                <button class="main-btn btn-instagram" onclick="shareScore()">Share to Instagram</button>
+            <div class="score-card">
+                <img src="wishy logo - horizontal fit.png" style="width: 120px; margin-bottom: 10px;">
+                <h2 style="margin:0; color:#7f8c8d; font-size: 1rem;">CAUGHT BY THE</h2>
+                <img src="monster.png" class="monster-display">
+                <h2 style="margin:0; color:#7f8c8d; font-size: 0.9rem;">FINAL SCORE</h2>
+                <div class="final-score-val" id="final-score">0</div>
+                
+                <button class="main-btn btn-insta" onclick="shareToInsta()">Share to Instagram</button>
+                
+                <div class="btn-group" style="margin-top:15px;">
+                    <button class="main-btn btn-medium" style="color:white; width: 100%;" onclick="resetToMenu()">Play Again</button>
+                </div>
             </div>
-
             <div class="copyright">© 2026 Wishy Production. All rights reserved.</div>
         </div>
 
@@ -257,18 +261,19 @@
         let score = 0;
         let gameActive = false;
         let spawnInterval;
-        let starX = window.innerWidth / 2 - 42;
+        let starX = window.innerWidth / 2 - 40;
         let keys = {};
 
         const config = {
             easy: { bullets: [{color: '#bdc3c7', penalty: 1}], monsterChance: 0.04, biscuitChance: 0.45 },
-            medium: { bullets: [{color: '#2ecc71', penalty: 1}, {color: '#f1c40f', penalty: 2}, {color: '#e67e22', penalty: 3}], monsterChance: 0.07, biscuitChance: 0.45 },
+            medium: { bullets: [{color: '#2ecc71', penalty: 1}, {color: '#f1c40f', penalty: 2}, {color: '#e67e22', penalty: 3}], monsterChance: 0.08, biscuitChance: 0.45 },
             hard: { bullets: [{color: '#2ecc71', penalty: 1}, {color: '#f1c40f', penalty: 2}, {color: '#e74c3c', penalty: 3}, {color: '#9b59b6', penalty: 4}], monsterChance: 0.12, biscuitChance: 0.4 }
         };
 
+        // CONTROLS
         document.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
-            starX = e.clientX - 42;
+            starX = e.clientX - 40;
             updateStarPos();
         });
 
@@ -277,18 +282,18 @@
 
         function gameLoop() {
             if (!gameActive) return;
-            const moveSpeed = 12;
-            if (keys['ArrowLeft'] || keys['KeyA']) starX -= moveSpeed;
-            if (keys['ArrowRight'] || keys['KeyD']) starX += moveSpeed;
+            if (keys['ArrowLeft'] || keys['KeyA']) starX -= 12;
+            if (keys['ArrowRight'] || keys['KeyD']) starX += 12;
             updateStarPos();
             requestAnimationFrame(gameLoop);
         }
 
         function updateStarPos() {
-            starX = Math.max(0, Math.min(window.innerWidth - 85, starX));
+            starX = Math.max(0, Math.min(window.innerWidth - 80, starX));
             star.style.left = starX + 'px';
         }
 
+        // GAMEPLAY
         function startGame(difficulty) {
             score = 0;
             gameActive = true;
@@ -298,41 +303,29 @@
             menuBtn.style.display = 'block';
             star.style.display = 'block';
             starImg.src = 'wishy-default.png';
-            scoreBoard.innerText = `Score: 0`;
+            scoreBoard.innerText = `SCORE: 0`;
             container.style.cursor = 'none';
-
             gameLoop();
             spawnInterval = setInterval(() => spawnItem(difficulty), 600);
         }
 
         function spawnItem(difficulty) {
             if (!gameActive) return;
-
             const roll = Math.random();
             const item = document.createElement('div');
-            let type = 'biscuit'; 
+            let type = (roll < config[difficulty].monsterChance) ? 'monster' : 
+                       (roll < (config[difficulty].monsterChance + config[difficulty].biscuitChance)) ? 'biscuit' : 'bullet';
 
-            if (roll < config[difficulty].monsterChance) {
-                type = 'monster';
-            } else if (roll < (config[difficulty].monsterChance + config[difficulty].biscuitChance)) {
-                type = 'biscuit';
-            } else {
-                type = 'bullet';
-            }
-
-            const startPos = Math.random() * (window.innerWidth - 90);
-            item.style.left = startPos + 'px';
-            item.style.top = '-110px';
+            item.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            item.style.top = '-100px';
 
             let bulletData = null;
-
             if (type === 'monster') {
                 item.className = 'monster';
                 item.innerHTML = `<img src="monster.png">`;
             } else if (type === 'bullet') {
                 item.className = 'flower-bullet';
-                const options = config[difficulty].bullets;
-                bulletData = options[Math.floor(Math.random() * options.length)];
+                bulletData = config[difficulty].bullets[Math.floor(Math.random() * config[difficulty].bullets.length)];
                 item.style.backgroundColor = bulletData.color;
             } else {
                 item.className = 'gem-biscuit';
@@ -340,8 +333,7 @@
             }
 
             container.appendChild(item);
-
-            let topPos = -110;
+            let topPos = -100;
             const fallSpeed = 5 + Math.random() * 5;
 
             const fall = setInterval(() => {
@@ -350,7 +342,7 @@
                 item.style.top = topPos + 'px';
 
                 if (checkCollision(star, item)) {
-                    if (type === 'monster') endGame("OOPS! CAUGHT BY THE MONSTER");
+                    if (type === 'monster') endGame();
                     else if (type === 'bullet') handleHit(bulletData.penalty);
                     else handleEat();
                     clearInterval(fall);
@@ -361,34 +353,28 @@
         }
 
         function checkCollision(a, b) {
-            const r1 = a.getBoundingClientRect();
-            const r2 = b.getBoundingClientRect();
-            const padding = 15;
-            return !(r1.top + padding > r2.bottom - padding || 
-                     r1.right - padding < r2.left + padding || 
-                     r1.bottom - padding < r2.top + padding || 
-                     r1.left + padding > r2.right - padding);
+            const r1 = a.getBoundingClientRect(), r2 = b.getBoundingClientRect(), p = 15;
+            return !(r1.top + p > r2.bottom - p || r1.right - p < r2.left + p || r1.bottom - p < r2.top + p || r1.left + p > r2.right - p);
         }
 
-        function handleHit(penalty) {
-            score -= penalty;
-            scoreBoard.innerText = `Score: ${score}`;
+        function handleHit(p) {
+            score -= p;
+            scoreBoard.innerText = `SCORE: ${score}`;
             star.classList.add('hit-shake');
-            setTimeout(() => star.classList.remove('hit-shake'), 300);
+            setTimeout(() => star.classList.remove('hit-shake'), 250);
         }
 
         function handleEat() {
             score++;
-            scoreBoard.innerText = `Score: ${score}`;
+            scoreBoard.innerText = `SCORE: ${score}`;
             starImg.src = 'wishy-open.png';
             setTimeout(() => { if(gameActive) starImg.src = 'wishy-default.png'; }, 250);
         }
 
-        function endGame(status) {
+        function endGame() {
             gameActive = false;
             clearInterval(spawnInterval);
-            document.getElementById('over-status').innerText = status;
-            document.getElementById('final-score').innerText = `Your Score: ${score}`;
+            document.getElementById('final-score').innerText = score;
             gameOverScreen.style.display = 'flex';
             star.style.display = 'none';
             menuBtn.style.display = 'none';
@@ -406,22 +392,14 @@
             container.style.cursor = 'default';
         }
 
-        async function shareScore() {
-            const shareData = {
-                title: 'Wishy\'s Escape',
-                text: `I just scored ${score} points in Wishy\'s' Escape! 🌟 Can you beat me?`,
-                url: window.location.href
-            };
-
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    // Fallback for desktop/unsupported browsers
-                    alert(`Score: ${score}\nCopy this link to share: ${window.location.href}`);
-                }
-            } catch (err) {
-                console.log('Error sharing:', err);
+        async function shareToInsta() {
+            const text = `I just scored ${score} in Wishy's Star Escape! 🌟 Can you beat the monster?`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Star Escape High Score', text: text, url: window.location.href });
+                } catch (err) { console.log(err); }
+            } else {
+                alert("Screenshot this page to share your score on Instagram Stories!");
             }
         }
     </script>
