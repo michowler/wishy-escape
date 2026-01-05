@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishy's Escape</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -19,7 +23,8 @@
             background-image: url('cloudsky.png');
             background-size: cover;
             background-position: center;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Font updated to Schoolbell */
+            font-family: 'Schoolbell', cursive, sans-serif;
             color: #333;
         }
 
@@ -46,14 +51,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            font-size: 0.85rem;
+            font-size: 1.1rem; /* Slightly larger for Schoolbell readability */
             margin-top: 15px;
             font-weight: bold;
             text-align: left;
         }
 
         #score-board {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
             color: var(--wishy-blue);
             text-shadow: 2px 2px 0px white;
@@ -61,6 +66,7 @@
         }
 
         .btn-mini-menu {
+            font-family: 'Schoolbell', cursive;
             padding: 8px 18px;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid var(--primary-yellow);
@@ -91,7 +97,7 @@
         }
 
         .main-logo { width: 250px; max-width: 70%; margin-bottom: 5px; }
-        h1 { font-size: 2.5rem; margin: 0 0 15px 0; color: var(--wishy-blue); text-transform: uppercase; letter-spacing: 2px; }
+        h1 { font-size: 3rem; margin: 0 0 15px 0; color: var(--wishy-blue); text-transform: uppercase; letter-spacing: 1px; }
 
         .instructions {
             background: white;
@@ -100,6 +106,7 @@
             max-width: 450px;
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
         }
 
         /* --- SCORE CARD (FOR INSTAGRAM) --- */
@@ -119,14 +126,14 @@
         .caught-text {
             color: #e74c3c;
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin: 10px 0;
             text-transform: uppercase;
         }
 
         .monster-display { width: 120px; height: 120px; margin: 5px 0; object-fit: contain; }
-        .final-score-label { font-weight: bold; color: #7f8c8d; letter-spacing: 1px; }
-        .final-score-val { font-size: 5rem; font-weight: 900; color: var(--wishy-blue); margin: -5px 0 0 0; }
+        .final-score-label { font-weight: bold; color: #7f8c8d; letter-spacing: 1px; font-size: 1.2rem; }
+        .final-score-val { font-size: 6rem; font-weight: 900; color: var(--wishy-blue); margin: -10px 0 0 0; }
 
         .btn-row {
             display: flex;
@@ -137,8 +144,9 @@
         }
         
         button.main-btn {
+            font-family: 'Schoolbell', cursive;
             padding: 14px 10px;
-            font-size: 0.85rem;
+            font-size: 1rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -154,8 +162,8 @@
             color: white;
         }
 
-        .copyright { font-size: 0.75rem; color: #7f8c8d; font-weight: bold; margin-top: 30px; }
-        .card-copyright { font-size: 0.6rem; color: #7f8c8d; font-weight: bold; margin-top: 15px; opacity: 0.8; }
+        .copyright { font-size: 0.9rem; color: #7f8c8d; font-weight: bold; margin-top: 30px; }
+        .card-copyright { font-size: 0.7rem; color: #7f8c8d; font-weight: bold; margin-top: 15px; opacity: 0.8; }
 
         /* --- GAME OBJECTS --- */
         #star { position: absolute; bottom: 50px; width: 80px; height: 80px; display: none; z-index: 50; }
@@ -182,14 +190,14 @@
             <div class="instructions">
                 <strong>HOW TO PLAY:</strong><br>
                 Move Wishy using your <strong>Mouse</strong> or <strong>Left/Right Arrows</strong>.<br>
-                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge Shooting Stars and the <strong>Monster</strong>!
+                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge Shooting Stars & the <strong>Monster</strong>!
                 
                 <div class="bullet-grid">
-                    <span style="color: #95a5a6">⚪ Grey Star: -1</span>
-                    <span style="color: #27ae60">🟢 Green Star: -1</span>
-                    <span style="color: #f39c12">🟡 Yellow Star: -2</span>
-                    <span style="color: #e74c3c">🔴 Red Star: -3</span>
-                    <span style="color: #8e44ad">🟣 Purple Star: -4</span>
+                    <span style="color: #95a5a6">⚪ Grey: -1</span>
+                    <span style="color: #27ae60">🟢 Green: -1</span>
+                    <span style="color: #f39c12">🟡 Yellow: -2</span>
+                    <span style="color: #e74c3c">🔴 Red: -3</span>
+                    <span style="color: #8e44ad">🟣 Purple: -4</span>
                     <span style="color: #000">👾 MONSTER: DEAD</span>
                 </div>
             </div>
@@ -306,7 +314,6 @@
                 if (!(r1.top + 15 > r2.bottom - 15 || r1.right - 15 < r2.left + 15 || r1.bottom - 15 < r2.top + 15 || r1.left + 15 > r2.right - 15)) {
                     if (type === 'monster') endGame();
                     else if (type === 'bullet') { 
-                        // Updated deduction logic: score cannot drop below 0
                         score = Math.max(0, score - bulletData.penalty); 
                         scoreBoard.innerText = `SCORE: ${score}`; 
                     }
