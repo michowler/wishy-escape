@@ -42,6 +42,16 @@
             pointer-events: none;
         }
 
+        .bullet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns for mobile-friendly height */
+            gap: 8px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: left;
+        }
+
         #score-board {
             font-size: 28px;
             font-weight: 900;
@@ -170,9 +180,18 @@
             <h1>Wishy's Escape</h1>
             
             <div class="instructions">
-                <strong>DODGE & COLLECT</strong><br>
-                Use <strong>Mouse</strong> or <strong>Arrows</strong>.<br>
-                Eat Biscuits for points. Avoid the Monster!
+                <strong>HOW TO PLAY:</strong><br>
+                Move Wishy using your <strong>Mouse</strong> or <strong>Left/Right Arrows</strong>.<br>
+                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge the <strong>Monster</strong>!
+                
+                <div class="bullet-grid">
+                    <span style="color: #95a5a6">⚪ Grey Flower: -1</span>
+                    <span style="color: #27ae60">🟢 Green Flower: -1</span>
+                    <span style="color: #f39c12">🟡 Yellow Flower: -2</span>
+                    <span style="color: #e74c3c">🔴 Red Flower: -3</span>
+                    <span style="color: #8e44ad">🟣 Purple Flower: -4</span>
+                    <span style="color: #000">👾 MONSTER: DEAD</span>
+                </div>
             </div>
 
             <div class="btn-row">
