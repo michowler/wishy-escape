@@ -44,7 +44,7 @@
 
         .bullet-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Two columns for mobile-friendly height */
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
             font-size: 0.85rem;
             margin-top: 15px;
@@ -107,7 +107,7 @@
             background-image: url('cloudsky.png');
             background-size: cover;
             background-position: center;
-            padding: 40px 20px 20px 20px; /* adjusted bottom padding */
+            padding: 40px 20px 20px 20px;
             border-radius: 30px;
             border: 6px solid white;
             width: 320px;
@@ -182,14 +182,14 @@
             <div class="instructions">
                 <strong>HOW TO PLAY:</strong><br>
                 Move Wishy using your <strong>Mouse</strong> or <strong>Left/Right Arrows</strong>.<br>
-                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge the <strong>Monster</strong>!
+                Eat <strong>Gem Biscuits</strong> for +1 point. Dodge Shooting Stars and the <strong>Monster</strong>!
                 
                 <div class="bullet-grid">
-                    <span style="color: #95a5a6">⚪ Grey Flower: -1</span>
-                    <span style="color: #27ae60">🟢 Green Flower: -1</span>
-                    <span style="color: #f39c12">🟡 Yellow Flower: -2</span>
-                    <span style="color: #e74c3c">🔴 Red Flower: -3</span>
-                    <span style="color: #8e44ad">🟣 Purple Flower: -4</span>
+                    <span style="color: #95a5a6">⚪ Grey Star: -1</span>
+                    <span style="color: #27ae60">🟢 Green Star: -1</span>
+                    <span style="color: #f39c12">🟡 Yellow Star: -2</span>
+                    <span style="color: #e74c3c">🔴 Red Star: -3</span>
+                    <span style="color: #8e44ad">🟣 Purple Star: -4</span>
                     <span style="color: #000">👾 MONSTER: DEAD</span>
                 </div>
             </div>
@@ -223,7 +223,6 @@
     </div>
 
     <script>
-        // ... (Script remains the same as the previous version) ...
         const container = document.getElementById('game-container');
         const star = document.getElementById('star');
         const starImg = document.getElementById('star-img');
@@ -306,7 +305,11 @@
                 const r1 = star.getBoundingClientRect(), r2 = item.getBoundingClientRect();
                 if (!(r1.top + 15 > r2.bottom - 15 || r1.right - 15 < r2.left + 15 || r1.bottom - 15 < r2.top + 15 || r1.left + 15 > r2.right - 15)) {
                     if (type === 'monster') endGame();
-                    else if (type === 'bullet') { score -= bulletData.penalty; scoreBoard.innerText = `SCORE: ${score}`; }
+                    else if (type === 'bullet') { 
+                        // Updated deduction logic: score cannot drop below 0
+                        score = Math.max(0, score - bulletData.penalty); 
+                        scoreBoard.innerText = `SCORE: ${score}`; 
+                    }
                     else { score++; scoreBoard.innerText = `SCORE: ${score}`; starImg.src = 'wishy-open.png'; setTimeout(()=>starImg.src='wishy-default.png', 200); }
                     item.remove(); clearInterval(fall);
                 }
